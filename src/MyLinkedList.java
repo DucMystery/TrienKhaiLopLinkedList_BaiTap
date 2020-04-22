@@ -1,97 +1,130 @@
-public class MyLinkedList<E> {
 
-    private class Node<E>{
-        Node<E> next;
-        Object data;
 
-        public Node(Object data){
+public class MyLinkedList<T> {
+
+    private class Node<T>{
+        Node<T> next;
+        T data;
+
+        public Node(T data){
             this.data =data;
         }
-        Object getData(){
-            return this.data;
+
+        public T getData(){
+            return data;
         }
     }
 
-    private Node head;
-    private int numNode;
+    Node<T> head =null;
+    Node<T> tail =null;
+    int size;
 
-    public MyLinkedList(Object data){
-        head =new Node(data);
-        numNode+=1;
-    }
+    public MyLinkedList(){}
 
-    void add(int index, Object data){
-        Node temp = head;
-        Node holder;
-
-        for (int i=0;i<index-1 && temp.next!=null;i++){
-            temp = temp.next;
-        }
-        holder =temp.next;
-        temp.next = new Node(data);
-        temp.next.next = holder;
-        numNode++;
-    }
-
-    void addFirst(E e){
-        Node<E> temp = head;
-        head = new Node(e);
-        head.next =temp;
-    }
-
-    void addLast(E e){
-        Node temp =head;
-
-        if (temp == null){
-            head  = temp;
+    void addFirst(T data){
+        if (head == null){
+            head =new Node<>(data);
+            tail =head;
         }else {
-            temp.next =new Node(e);
-            temp =temp.next;
+            Node temp = head;
+            head = new Node<>(data);
+            head.next = temp;
+            ++size ;
         }
-        numNode++;
     }
 
-    E remove(int index){
-        if (index<0 || index>=numNode){
+    void addLast(T data){
+        if (head == null){
+            head = new Node<>(data);
+            tail = head;
+        }else {
+            tail.next = new Node<>(data);
+            tail =tail.next;
+            ++size;
+        }
+    }
+
+//    void add(T data){
+//        if (head == null){
+//            head = new Node<>(data);
+//            tail =head;
+//        }else {
+//            tail.next = new Node<>(data);
+//            tail =tail.next;
+//            size ++;
+//        }
+//    }
+
+    T remove(int index){
+        Node temp = head;
+        if (index<0 || index>=size){
             return null;
+        }else {
+            for (int i =0;i<index;i++){
+                temp =temp.next;
+            }
+            temp.next = temp.next.next;
         }
-        Node temp =head;
-        for (int i =0;i<index;i++){
-            temp =temp.next;
-        }
-        Node current =temp.next;
-        temp.next =current.next;
-        numNode--;
-        return (E) current.data;
+        size--;
+        return (T) temp.data;
+
     }
 
-    int size(){
-        return numNode;
+    int getSize(){
+        return ++size ;
     }
-    boolean contains(E e){
-        Node temp =head;
-        for (int i=0;i<numNode;i++){
-            temp=temp.next;
-            if (e.equals(temp))
+
+    boolean contains(T data){
+        Node<T> temp =  head;
+        for (int i=0;i<size;i++){
+            if (temp.data ==data)
                 return true;
+            temp =temp.next;
         }
         return false;
     }
-    Node get(int index){
-        Node temp =head;
 
-        for (int i=0;i<index;i++){
-            temp =temp.next;
+    T get(int index){
+        Node temp = head;
+        if (index<0 || index>=size){
+            return null;
+        }else {
+            for (int i= 0; i<index-1;i++){
+                temp =temp.next;
+            }
         }
-        return  temp;
+        return (T) temp.next.data;
     }
 
-    void printList(){
-        Node temp = head;
+    T getFirst(){
+        if (head ==null){
+            return null;
+        }else {
+            return head.data;
+        }
+    }
 
-        while (temp.next!=null){
+    T getLast(){
+        Node<T> temp = head;
+        if (head == null){
+            return null;
+        }else {
+            while (temp.next!=null){
+                temp =temp.next;
+            }
+        }
+        return temp.data;
+    }
+
+
+
+    void show(){
+        Node<T> temp =head;
+        while (temp!= null){
             System.out.println(temp.data);
             temp =temp.next;
         }
     }
+
+
 }
